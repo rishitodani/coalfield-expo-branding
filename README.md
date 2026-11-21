@@ -1,0 +1,6 @@
+# Coalfield Trade Expo 2026 - Print King stall branding
+
+- `portal/` - registration form (`index.html`), Google Apps Script backend (`Code.gs`, `appsscript.json`) and `SETUP.md`.
+- `a4-pages/` - source of the A4 exhibitor pages (cover + 3x3, 6x3, 9x3). They reference images stored in the Claude artifact, so open the artifact to view/print them.
+- `assets/` - event logo and payment QR code.
+- `PRICING.md` - rate card.
