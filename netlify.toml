@@ -1,0 +1,4 @@
+# Publishes only the registration form (not the backend script, pricing notes or A4 sources).
+[build]
+  command = "mkdir -p dist && cp portal/index.html dist/index.html"
+  publish = "dist"
