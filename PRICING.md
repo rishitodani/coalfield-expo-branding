@@ -9,4 +9,4 @@
 
 Tables included with stall: 3x3 = 1, 6x3 = 2, 9x3 = 3. Flex and vinyl cannot be mixed.
 Sizes: flex wall 111" x 93" (back 223" / 335" for 6x3 / 9x3); vinyl boards 34" x 90" (3 per 3 m wall).
-Deadline for ready artwork and payment: 30 November 2026. GST rate used in the portal: 18% (confirm).
+Deadline for ready artwork and payment: 30 November 2026. GST rate used in the portal: 18%.
