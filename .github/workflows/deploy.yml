@@ -1,4 +1,5 @@
 name: Deploy registration form to GitHub Pages
+# Triggered on every push to main that changes the form or this file.
 
 on:
   push:
