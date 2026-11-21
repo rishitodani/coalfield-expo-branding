@@ -6,6 +6,6 @@
 - `PRICING.md` - rate card.
 
 ## Deploy
-The registration form (`portal/index.html`) is deployed automatically by Netlify on every push to `main`
-(see `netlify.toml`). Only `index.html` is published. The repo can stay private.
+The registration form (`portal/index.html`) is deployed automatically to GitHub Pages on every push to `main`
+(see `.github/workflows/deploy.yml`). Only `index.html` is published.
 Set `BACKEND_URL` in `portal/index.html` to the Apps Script web app URL, then push.
