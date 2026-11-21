@@ -9,7 +9,7 @@ const CONFIG = {
   SHEET_NAME: 'Submissions',
   NOTIFY_EMAIL: 'contact@printking.in',
   TIME_ZONE: 'Asia/Kolkata',
-  DEADLINE: '2026-12-03T23:59:59+05:30',
+  DEADLINE: '2026-11-30T23:59:59+05:30',
   CLOSE_AFTER_DEADLINE: true, // set false to keep accepting submissions after the deadline
   GST_RATE: 18,               // percent - CONFIRM before going live
   MAX_FILE_BYTES: 150 * 1024 * 1024,
@@ -110,7 +110,7 @@ function safeCell_(v) {
 
 function checkOpen_() {
   if (CONFIG.CLOSE_AFTER_DEADLINE && new Date() > new Date(CONFIG.DEADLINE)) {
-    throw new Error('Registrations are closed. The deadline was 3 December 2026.');
+    throw new Error('Registrations are closed. The deadline was 30 November 2026.');
   }
 }
 

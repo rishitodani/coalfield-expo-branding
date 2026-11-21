@@ -24,7 +24,7 @@ You need: the Google account contact@printking.in, and somewhere to host `index.
 ## Settings to confirm
 - GST rate: `GST_RATE: 18` in BOTH `Code.gs` and `index.html`. Change both if it is not 18.
 - Prices: the `PRICES` block is in both files. Keep them identical.
-- Deadline: `DEADLINE` in both files (3 December 2026, 11:59 pm IST). Set `CLOSE_AFTER_DEADLINE: false` in `Code.gs` to keep accepting after the deadline; the page itself also hides the form after the deadline.
+- Deadline: `DEADLINE` in both files (30 November 2026, 11:59 pm IST). Set `CLOSE_AFTER_DEADLINE: false` in `Code.gs` to keep accepting after the deadline; the page itself also hides the form after the deadline.
 - After any change to `Code.gs`: Deploy > Manage deployments > edit (pencil) > Version "New version" > Deploy. The URL stays the same.
 
 ## What you get
