@@ -19,7 +19,7 @@ const CONFIG = {
 };
 
 const PRICES = {
-  flex:  { wall: 2250, design: { '3x3': 1000, '6x3': 1000, '9x3': 1000 } },
+  flex:  { wall: 2250, design: { '3x3': 1500, '6x3': 1500, '9x3': 1500 } },
   vinyl: { wall: 3000, design: { '3x3': 2000, '6x3': 2500, '9x3': 3000 } },
   table: 350
 };
