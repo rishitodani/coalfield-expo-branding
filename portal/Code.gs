@@ -302,7 +302,7 @@ function handleInit_(req) {
     const row = [
       Utilities.formatDate(new Date(), CONFIG.TIME_ZONE, 'dd MMM yyyy HH:mm'), ref, 'INCOMPLETE',
       company.name, company.contact, company.phone, company.email, company.gstin, company.address,
-      sel.stall.replace('x', ' x ') + ' m', sel.method === 'flex' ? 'Flex on iron frame' : 'Vinyl on boards',
+      stallLabel_(sel.stall), sel.method === 'flex' ? 'Flex on iron frame' : 'Vinyl on boards',
       partsText, price.designNeeded ? 'Yes' : 'No', brief, price.subtotal, price.gst, price.total,
       pay.mode, pay.txn, pay.amount, folder.getUrl(), '', ''
     ].map(safeCell_);
@@ -378,13 +378,17 @@ function inr_(n) {
   return 'Rs. ' + Number(n).toLocaleString('en-IN', { minimumFractionDigits: n % 1 ? 2 : 0, maximumFractionDigits: 2 });
 }
 
+function stallLabel_(k) {
+  return ({ '3x3': '10 ft x 10 ft', '6x3': '20 ft x 10 ft', '9x3': '30 ft x 10 ft' })[k] || k;
+}
+
 function summaryText_(ref, s) {
   const c = s.company;
   const lines = [
     'Coalfield Trade Expo 2026 - stall branding registration', 'Reference: ' + ref, '',
     'Company: ' + c.name, 'Contact person: ' + c.contact, 'Phone: ' + c.phone, 'Email: ' + c.email,
     'GSTIN: ' + (c.gstin || '-'), 'Address: ' + c.address, '',
-    'Stall: ' + s.stall.replace('x', ' x ') + ' m', 'Method: ' + (s.method === 'flex' ? 'Flex on iron frame' : 'Vinyl on boards'),
+    'Stall: ' + stallLabel_(s.stall), 'Method: ' + (s.method === 'flex' ? 'Flex on iron frame' : 'Vinyl on boards'),
     'Parts: ' + s.partsText, ''
   ];
   s.lines.forEach(function (l) { lines.push(l.label + ': ' + inr_(l.amount)); });
