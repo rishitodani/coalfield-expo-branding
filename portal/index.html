@@ -176,7 +176,7 @@ footer{text-align:center;font-size:14px;color:#454b5a;padding:0 16px 32px}
 <label class="f">How did you pay?
 <select id="payMode"><option value="">Choose</option><option>UPI</option><option>NEFT</option><option>RTGS</option><option>IMPS</option><option>Cheque</option><option>Cash</option><option>Other</option></select></label>
 <label class="f">Transaction / UTR / cheque number<input type="text" id="txn" maxlength="40" autocomplete="off"></label>
-<label class="f">Amount paid (₹)<input type="text" id="amtPaid" readonly></label>
+<label class="f">Amount paid (₹)<input type="text" id="amtPaid" inputmode="decimal" autocomplete="off"><span class="hint" style="font-size:13px">Pre-filled with the total. Change it if you paid a different amount.</span></label>
 <div class="f"><span style="font-weight:500;font-size:14px">Payment screenshot</span>
 <button type="button" class="btn" id="payPick">Choose screenshot or PDF</button>
 <ul class="files" id="payFiles"></ul>
@@ -233,6 +233,7 @@ var PAY_EXT = ['jpg', 'jpeg', 'png', 'pdf', 'webp', 'heic'];
 var FLEX_SIZE = { 1: '111" × 93"', 2: '223" × 93"', 3: '335" × 93"' };
 
 function mk() { return { on: false, mode: '', files: [] }; }
+var amtEdited = false;
 var state = { stall: '', method: '', parts: { left: mk(), back: mk(), right: mk(), table: mk() }, brief: [], pay: [], submitting: false, done: false };
 state.parts.table.qty = 1;
 
@@ -272,6 +273,7 @@ function selection() {
   });
   return { stall: state.stall, method: state.method, parts: parts };
 }
+function paidAmount() { var n = parseFloat(String($('amtPaid').value).replace(/[^0-9.]/g, '')); return isFinite(n) ? Math.round(n * 100) / 100 : 0; }
 function ready() { return state.stall && state.method; }
 function anyOn() { return Object.keys(state.parts).some(function (k) { return state.parts[k].on; }); }
 
@@ -327,7 +329,7 @@ function fileList(ul, arr, which) {
 function renderSummary() {
   if (!ready() || !anyOn()) {
     $('summary').innerHTML = '<p class="hint">Your price appears here once you choose your parts.</p>';
-    $('payAmount').textContent = '₹0'; $('amtPaid').value = ''; updateUpi(); return;
+    $('payAmount').textContent = '₹0'; $('amtPaid').value = ''; amtEdited = false; updateUpi(); return;
   }
   var p = calcPrice(selection());
   var h = '<table class="sum">' + p.lines.map(function (l) { return '<tr><td>' + esc(l.label) + '</td><td>' + money(l.amount) + '</td></tr>'; }).join('') +
@@ -336,7 +338,7 @@ function renderSummary() {
     '<tr class="tot"><td>Total payable</td><td>' + money(p.total) + '</td></tr></table>';
   $('summary').innerHTML = h;
   $('payAmount').textContent = money(p.total);
-  $('amtPaid').value = String(p.total);
+  if (!amtEdited) $('amtPaid').value = String(p.total);
   updateUpi();
 }
 var UPI_ID = '9002237522@okbizaxis';
@@ -435,6 +437,7 @@ function validate() {
   }
   if (!$('payMode').value) errs.push({ id: 'payMode', text: 'Choose how you paid' });
   if ($('txn').value.trim().length < 4) errs.push({ id: 'txn', text: 'Enter the transaction / UTR / cheque number' });
+  if (!(paidAmount() > 0)) errs.push({ id: 'amtPaid', text: 'Enter the amount you paid' });
   if (!state.pay.length) errs.push({ id: 'payPick', text: 'Upload your payment screenshot' });
   if (!$('agree').checked) errs.push({ id: 'agree', text: 'Tick the confirmation box' });
   return errs;
@@ -491,7 +494,7 @@ async function submit() {
     action: 'init', website: $('website').value,
     company: { name: $('company').value, contact: $('contact').value, phone: $('phone').value, email: $('email').value, gstin: $('gstin').value, address: $('address').value },
     selection: sel, brief: price.designNeeded ? $('brief').value : '',
-    payment: { mode: $('payMode').value, txn: $('txn').value, amount: price.total },
+    payment: { mode: $('payMode').value, txn: $('txn').value, amount: paidAmount() },
     files: items.map(function (it) { return { key: it.key, part: it.part, name: it.file.name, size: it.file.size, mime: it.file.type || 'application/octet-stream' }; })
   };
   var ref, token, uploads;
@@ -553,6 +556,7 @@ $('f').addEventListener('submit', async function (e) {
     if (prev) { $('again').hidden = false; $('again').textContent = 'A registration was already submitted from this device (reference ' + prev + '). Each exhibitor can submit only once.'; }
   } catch (x) {}
   $('company').addEventListener('input', updateUpi);
+  $('amtPaid').addEventListener('input', function () { amtEdited = true; });
   renderAll();
 })();
 </script>

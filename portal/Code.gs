@@ -161,7 +161,9 @@ function validatePayment_(p, total) {
     amount: Number(p.amount)
   };
   if (PAY_MODES.indexOf(out.mode) < 0) throw new Error('Choose how you paid.');
-  if (Math.abs(out.amount - total) > 0.001) throw new Error('The payment amount does not match the total payable.');
+  if (!isFinite(out.amount) || out.amount <= 0 || out.amount > 10000000) throw new Error('Enter the amount you paid.');
+  out.amount = Math.round(out.amount * 100) / 100;
+  out.mismatch = Math.abs(out.amount - total) > 0.001;
   return out;
 }
 
@@ -304,7 +306,7 @@ function handleInit_(req) {
       company.name, company.contact, company.phone, company.email, company.gstin, company.address,
       stallLabel_(sel.stall), sel.method === 'flex' ? 'Flex on iron frame' : 'Vinyl on boards',
       partsText, price.designNeeded ? 'Yes' : 'No', brief, price.subtotal, price.gst, price.total,
-      pay.mode, pay.txn, pay.amount, folder.getUrl(), '', ''
+      pay.mode, pay.txn, pay.amount, folder.getUrl(), '', pay.mismatch ? 'CHECK: paid ' + pay.amount + ' vs total payable ' + price.total : ''
     ].map(safeCell_);
     sh.appendRow(row);
     cache.put('sub_' + ref, JSON.stringify({
@@ -393,7 +395,7 @@ function summaryText_(ref, s) {
   ];
   s.lines.forEach(function (l) { lines.push(l.label + ': ' + inr_(l.amount)); });
   lines.push('Subtotal: ' + inr_(s.subtotal), 'GST ' + CONFIG.GST_RATE + '%: ' + inr_(s.gst), 'Total payable: ' + inr_(s.total), '',
-    'Payment mode: ' + s.pay.mode, 'Transaction no.: ' + s.pay.txn, 'Amount paid: ' + inr_(s.pay.amount));
+    'Payment mode: ' + s.pay.mode, 'Transaction no.: ' + s.pay.txn, 'Amount paid: ' + inr_(s.pay.amount) + (Math.abs(s.pay.amount - s.total) > 0.001 ? '  (DIFFERS from total payable - verify)' : ''));
   if (s.brief) lines.push('', 'Design brief:', s.brief);
   return lines.join('\n');
 }
